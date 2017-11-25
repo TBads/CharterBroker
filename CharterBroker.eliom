@@ -7,7 +7,7 @@
 
 module Config =
   struct
-    let port = 8080 (* port access to the website *)
+    let port = 80 (* port access to the website *)
   end
 
 module CharterBroker_app =
@@ -28,6 +28,7 @@ let request_for_quote_action =
                                                    string "departure_city" **
                                                    string "arrival_city" **
                                                    string "departure_date" **
+                                                   string "return_date" **
                                                    string "number_of_passengers"
                                                   ) ()
 
@@ -53,7 +54,8 @@ let request_for_quote_form =
             (departure_city,
              (arrival_city,
               (departure_date,
-                number_of_passengers))))))) ->
+               (return_date,
+                number_of_passengers)))))))) ->
       [div ~a:[a_id "rfq_form_outer_div"]
        [div ~a:[a_class ["panel panel-primary"]; a_id "rfq_panel"]
         [div ~a:[a_class ["panel-heading"]; a_id "rfq_heading"]
@@ -138,6 +140,16 @@ let request_for_quote_form =
           div ~a:[a_class ["form-group"]]
           [div ~a:[a_class ["input-group"]]
            [Raw.span ~a:[a_class ["input-group-addon"]]
+            [Raw.span ~a:[a_class ["glyphicon glyphicon-calendar"]] []
+            ];
+            string_input ~a:[a_class ["form-control"]; a_placeholder "Return Date"]
+              ~input_type:`Text ~name:return_date ()
+           ]
+          ];
+
+          div ~a:[a_class ["form-group"]]
+          [div ~a:[a_class ["input-group"]]
+           [Raw.span ~a:[a_class ["input-group-addon"]]
             [Raw.span ~a:[a_class ["glyphicon glyphicon-plus"]] []
             ];
             string_input ~a:[a_class ["form-control"]; a_placeholder "Passengers"]
@@ -166,7 +178,7 @@ let () =
            ~css:[["css";"CharterBroker.css"]]
            ~other_head:[bootstrap_cdn_link; font_awesome_cdn_link]
            Html5.F.(body [
-             div ~a:[a_id "main_header"] [pcdata "Swift Air"];
+             div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
              div ~a:[a_id "main_pg_outer_div"]
              [div ~a:[a_id "form_div"] [request_for_quote_form ()];
               div ~a:[a_id "info_div"]
@@ -228,7 +240,8 @@ let () =
               (departure_city,
                (arrival_city,
                 (departure_date,
-                 num_passengers)))))))->
+                 (return_date,
+                 num_passengers)))))))) ->
     let _ = {unit{form_submit_test ()}} in
     let open Db_funs in
     lwt write_result =
@@ -240,6 +253,7 @@ let () =
         ~departure_city
         ~arrival_city
         ~departure_date
+        ~return_date
         ~num_passengers
     in
     match write_result with
@@ -254,6 +268,7 @@ let () =
         "Departure City: " ^ departure_city ^ "\n\n" ^
         "Arrival City: " ^ arrival_city ^ "\n\n" ^
         "Departure Date: " ^ departure_date ^ "\n\n" ^
+        "Return Date: " ^ return_date ^ "\n\n" ^
         "Number of Passengers: " ^ num_passengers ^ "\""
       in
       lwt () =
