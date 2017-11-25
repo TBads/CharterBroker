@@ -1,3 +1,5 @@
+Need to launch with command:
+sudo PATH=$PATH OCAMLPATH=$OCAMLPATH LD_LIBRARY_PATH=$LD_LIBRARY_PATH make run.byte &
 
 Instructions
 ============
