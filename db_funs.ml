@@ -18,6 +18,7 @@ let len_check
   ~departure_city
   ~arrival_city
   ~departure_date
+  ~return_date
   ~num_passengers =
   let open String in
   let failed_fields = ref [] in
@@ -57,6 +58,11 @@ let len_check
     | false -> failed_fields := !failed_fields @ ["Departure Date"]
   in
   let () =
+    match length return_date <= 45 with
+    | true -> ()
+    | false -> failed_fields := !failed_fields @ ["Return Date"]
+  in
+  let () =
     match length num_passengers <= 45 with
     | true -> ()
     | false -> failed_fields := !failed_fields @ ["Number of Passengers"]
@@ -90,10 +96,11 @@ let write_request_for_quote
   ~departure_city
   ~arrival_city
   ~departure_date
+  ~return_date
   ~num_passengers =
   (* First check that all user inputs meet the length requirements *)
   match len_check ~first_name ~last_name ~phone_number ~email ~departure_city
-          ~arrival_city ~departure_date ~num_passengers with
+          ~arrival_city ~departure_date ~return_date ~num_passengers with
   | CheckFailure msg -> Lwt.return @@ DbWriteFail msg
   | Success ->
     let conn = connect user_db in
@@ -101,7 +108,7 @@ let write_request_for_quote
     let sql_stmt =
       "INSERT INTO CharterBroker.RequestForQuote (" ^
       "first_name, last_name, phone_number, email_address, departure_city, " ^
-      "arrival_city, departure_date, passengers)" ^
+      "arrival_city, departure_date, return_date, passengers)" ^
       " VALUES ('" ^
       (esc first_name) ^ "', '" ^
       (esc last_name) ^ "', '" ^
@@ -110,6 +117,7 @@ let write_request_for_quote
       (esc departure_city) ^ "', '" ^
       (esc arrival_city) ^ "', '" ^
       (esc departure_date) ^ "', '" ^
+      (esc return_date) ^ "', '" ^
       (esc num_passengers) ^ "')"
     in
     let _ = exec conn sql_stmt in
