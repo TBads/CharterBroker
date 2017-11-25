@@ -5,9 +5,16 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-a {
-  color: #00FF7F !important;
-  font-weight: bold;
+html {
+  background-image: url(pexels-photo-230976.jpeg);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+body {
+    background-color: transparent !important;
+    /*background: -moz-linear-gradient(right center, black, transparent, black) no-repeat center fixed;*/
+    background-size: cover;
 }
 
 .panel {
@@ -15,36 +22,43 @@ a {
   box-shadow: 0px 0px 0px transparent !important;
 }
 
-
 #main_header{
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     width: 1000px;
-    height: 100px;
-    margin: 30px auto;
+    height: auto;
+    margin: 20px auto;
     text-align: center;
-    line-height: 50px;
-    border-radius: 15px;
+    /*border-radius: 4px;*/
+    font-weight: bold;
+    font-size: 80px;
+    border-bottom: 3px solid #333;
+}
+
+#main_header h1 {
+    font-weight: bold;
+    font-size: 70px;
+    border-bottom: 3px solid #333;
 }
 
 #rfq_form_outer_div {
     margin: auto;
-    width: 600px;
-    border-radius: 15px
+    width: 80%;
+    border-radius: 4px
 }
 
 #rfq_panel {
-    border: 1px solid #634271;
-    background-color: whitesmoke !important;
-    width: 100%x;
+    border: none /*1px solid #634271*/;
+    background-color: transparent /*whitesmoke*/ !important;
+    width: 100%;
     margin: auto;
     margin-top: 25px;
-    border-radius: 10px
+    border-radius: 4px
 }
 
 #rfq_heading {
-    background-color: #634271;
-    border: 1px solid #634271;
-    border-radius: 8px 8px 0px 0px;
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
     text-align: center;
     height: 50px;
     display: table;
@@ -52,15 +66,23 @@ a {
 }
 
 #rfq_title {
+    border-bottom: 2px solid #333;
+    font-size: 35px;
+    padding-bottom: 10px;
     color: whitesmoke;
-    background-color: none;
+    /*background-color: none;*/
     display: table-cell;
     vertical-align: middle;
+    text-shadow: 2px 2px 4px #333;
 }
 
 #rfq_body {
-    border-radius: 10px;
-    background: whitesmoke !important
+    border-radius: 4px;
+    background: transparent /*whitesmoke*/ !important
+}
+
+.form-group {
+    box-shadow: 4px 4px 4px grey;
 }
 
 #rfq_text {
@@ -68,15 +90,69 @@ a {
 }
 
 #rfq_button_div {
-    background-color: whitesmoke !important;
+    /*background-color: whitesmoke !important;*/
     padding-bottom: 15px;
-    border-radius: 10px
+    border-radius: 4px;
 }
 
 #rfq_submit_button {
     width: 150px;
     margin: auto;
-    background-color: #634271;
-    border-color: #634271;
-    font-size: 16px
+    color: whitesmoke;
+    background-color: rgba(45, 45, 45, 0.8);
+    border: medium none;
+    /*border-color: #634271;*/
+    font-size: 19px;
+    box-shadow: 2px 2px 4px grey;
+    height: 40px;
+    padding: 0px;
+    text-shadow: 2px 2px 2px #333;
+}
+
+#main_pg_outer_div {
+    width: 1000px;
+    height: 800px;
+    margin: 25px auto 0px auto;
+}
+
+#form_div {
+    width: 44%;
+    float: left;
+}
+
+#info_div {
+    margin-top: 40px;
+    width: 43%;
+    float: right;
+}
+
+#info_div h3 {
+    font-size: 20px;
+    color: whitesmoke;
+    text-shadow: 2px 2px 4px #333;
+}
+
+#main_pg_bullets {
+  /*border: 2px solid red;*/
+  height: 100px;
+  width: 100%;
+  vertical-align: middle;
+}
+
+#glyphs {
+  /*border: 2px solid green;*/
+  float: left;
+  font-size: 20px;
+  height: 100%;
+  width: 50px;
+  padding: 12px;
+}
+
+#bullet_text {
+  /*border: 2px solid blue;*/
+  height: 50px;
+  width: 100%;
+  vertical-align: middle;
+  margin-top: 0px;
+  padding-top: 10px;
 }

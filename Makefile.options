@@ -6,7 +6,7 @@
 PROJECT_NAME := CharterBroker
 
 # Source files for the server
-SERVER_FILES := db_funs.ml CharterBroker.eliom
+SERVER_FILES := secure_info.ml db_funs.ml CharterBroker.eliom
 # Source files for the client
 CLIENT_FILES := $(wildcard *.eliomi *.eliom)
 

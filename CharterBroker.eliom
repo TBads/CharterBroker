@@ -61,7 +61,8 @@ let request_for_quote_form =
           [pcdata "Request a Quote"]
          ];
 
-         div ~a:[a_class ["panel-body"]; a_style "border-radius: 10px; background: whitesmoke"]
+         (*div ~a:[a_class ["panel-body"]; a_style "border-radius: 10px; background: whitesmoke"]*)
+         div ~a:[a_class ["panel-body"]; a_style "border-radius: 10px; background: transparent"]
          [
 
           div ~a:[a_class ["form-group"]]
@@ -161,15 +162,51 @@ let () =
     (fun () () ->
       Lwt.return
         (Eliom_tools.F.html
-           ~title:"CharterBroker"
+           ~title:"Private Air Charters"
            ~css:[["css";"CharterBroker.css"]]
            ~other_head:[bootstrap_cdn_link; font_awesome_cdn_link]
            Html5.F.(body [
-             div ~a:[a_id "main_header"]
-             [h1 [pcdata "John's M'uh Fuggin Charter Broka' Hustle"]
-             ];
-             request_for_quote_form ()
-           ])))
+             div ~a:[a_id "main_header"] [pcdata "Swift Air"];
+             div ~a:[a_id "main_pg_outer_div"]
+             [div ~a:[a_id "form_div"] [request_for_quote_form ()];
+              div ~a:[a_id "info_div"]
+              [
+                div ~a:[a_id "main_pg_bullets"]
+                [div ~a:[a_class ["glyphicon glyphicon-menu-right"]; a_id "glyphs"] [];
+                 h3 ~a:[a_id "bullet_text"]
+                   [pcdata ("The premier solution for all your private charter needs.")]
+                ];
+
+                div ~a:[a_id "main_pg_bullets"]
+                [div ~a:[a_class ["glyphicon glyphicon-menu-right"]; a_id "glyphs"] [];
+                 h3 ~a:[a_id "bullet_text"]
+                   [pcdata ("24/7 Support for vacation, business, and " ^
+                            "ASAP/emergency travel bookings.")]
+                ];
+
+                div ~a:[a_id "main_pg_bullets"]
+                [div ~a:[a_class ["glyphicon glyphicon-menu-right"]; a_id "glyphs"] [];
+                 h3 ~a:[a_id "bullet_text"]
+                   [pcdata "Access to domestic and international charter services"]
+                ];
+
+                div ~a:[a_id "main_pg_bullets"]
+                [div ~a:[a_class ["glyphicon glyphicon-menu-right"]; a_id "glyphs"] [];
+                 h3 ~a:[a_id "bullet_text"]
+                   [pcdata ("Global Express Charter provides the highest quality " ^
+                          "while maintaining the best value for its clients.")]
+                ];
+
+                div ~a:[a_id "main_pg_bullets"]
+                [div ~a:[a_class ["glyphicon glyphicon-menu-right"]; a_id "glyphs"] [];
+                 h3 ~a:[a_id "bullet_text"]
+                   [pcdata "Request a FREE quote for your trip today!"]
+                ]
+
+              ]
+             ]
+            ]
+           )))
 
 {client{
 
@@ -191,31 +228,41 @@ let () =
               (departure_city,
                (arrival_city,
                 (departure_date,
-                 number_of_passengers)))))))->
+                 num_passengers)))))))->
     let _ = {unit{form_submit_test ()}} in
-    Db_funs.write_request_for_quote
-      ~first_name
-      ~last_name
-      ~phone_number
-      ~email
-      ~departure_city
-      ~arrival_city
-      ~departure_date
-      ~number_of_passengers >>
-    Os_email.send
-      ~from_addr:("John's M'uh Fuggin Charter Broka' Hustle", "John@CharterBrokaHustle.pimp")
-      ~to_addrs:[("The Bean Burrito", "johnmbrittain@gmail.com")]
-      ~subject:("RFQ - " ^ first_name ^ " " ^ last_name)
-      [
-        "first_name";
-        "last_name";
-        "phone_number";
-        "email";
-        "departure_city";
-        "arrival_city";
-        "departure_date";
-        "number_of_passengers"
-      ]
-    >>
-    Lwt.return ()
+    let open Db_funs in
+    lwt write_result =
+      Db_funs.write_request_for_quote
+        ~first_name
+        ~last_name
+        ~phone_number
+        ~email
+        ~departure_city
+        ~arrival_city
+        ~departure_date
+        ~num_passengers
+    in
+    match write_result with
+    | DbWriteFail msg -> Lwt.return @@ ignore {unit{window##alert(Js.string %msg)}}
+    | DbWriteSuccess ->
+      let subject = "\"RFQ " ^ first_name ^ " " ^ last_name ^ "\" " in
+      let msg =
+        "\"First Name: " ^ first_name ^ "\n\n" ^
+        "Last Name: " ^ last_name ^ "\n\n" ^
+        "Phone Number: " ^ phone_number ^ "\n\n" ^
+        "e-mail: " ^ email ^ "\n\n" ^
+        "Departure City: " ^ departure_city ^ "\n\n" ^
+        "Arrival City: " ^ arrival_city ^ "\n\n" ^
+        "Departure Date: " ^ departure_date ^ "\n\n" ^
+        "Number of Passengers: " ^ num_passengers ^ "\""
+      in
+      lwt () =
+        try
+          let s = "python send_mail.py 'johnmbrittain@gmail.com' " ^ subject ^ msg in
+          Lwt_io.print s >>
+          lwt mail_process_status = Lwt_process.exec (Lwt_process.shell s) in
+          Lwt_io.print "Mail should have worked!"
+        with _ -> Lwt_io.print "Error: send_mail.py did not work"
+      in
+      Lwt.return ()
   )
