@@ -1,5 +1,10 @@
 Need to launch with command:
-sudo PATH=$PATH OCAMLPATH=$OCAMLPATH LD_LIBRARY_PATH=$LD_LIBRARY_PATH make run.byte &
+1) Kill the process with sudo
+      sudo pgrep ocsigen
+      kill
+2) sudo make clean
+3) sudo make install
+4) sudo PATH=$PATH OCAMLPATH=$OCAMLPATH LD_LIBRARY_PATH=$CAML_LD_LIBRARY_PATH make run.byte &
 
 Instructions
 ============
