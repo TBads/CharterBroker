@@ -6,9 +6,10 @@
 }
 
 html {
-  background-image: url(pexels-photo-230976.jpeg);
-  background-repeat: no-repeat;
-  background-size: 100%;
+  /*background-image: url(pexels-photo-230976.jpeg);*/
+  /*background-repeat: no-repeat;*/
+    background: url(pexels-photo-230976.jpeg) no-repeat center center fixed;
+    background-size: cover;
 }
 
 body {
