@@ -120,6 +120,10 @@ body {
     float: left;
 }
 
+.form-group {
+    border-radius: 5px;
+}
+
 #info_div {
     margin-top: 40px;
     width: 43%;
