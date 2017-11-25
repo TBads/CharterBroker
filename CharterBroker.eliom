@@ -199,13 +199,13 @@ let () =
                 div ~a:[a_id "main_pg_bullets"]
                 [div ~a:[a_class ["glyphicon glyphicon-menu-right"]; a_id "glyphs"] [];
                  h3 ~a:[a_id "bullet_text"]
-                   [pcdata "Access to domestic and international charter services"]
+                   [pcdata "Access to domestic and international charter services."]
                 ];
 
                 div ~a:[a_id "main_pg_bullets"]
                 [div ~a:[a_class ["glyphicon glyphicon-menu-right"]; a_id "glyphs"] [];
                  h3 ~a:[a_id "bullet_text"]
-                   [pcdata ("Global Express Charter provides the highest quality " ^
+                   [pcdata ("U.S. Charter Brokers provides the highest quality charters, " ^
                           "while maintaining the best value for its clients.")]
                 ];
 
