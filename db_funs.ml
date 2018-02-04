@@ -212,8 +212,19 @@ let write_available_leg
 
 (* Get the available legs from the database *)
 let available_legs () =
-  let conn = connect user_db in
+  let open Unix in
+  let now = Unix.gmtime @@ Unix.time () in
+  let y, m, d = 1900 + now.tm_year, now.tm_mon, now.tm_mday in
+  let conn = Mysql.connect user_db in
   let sql_stmt = "SELECT * FROM CharterBroker.AvailableLegs" in
   let res = exec conn sql_stmt |> sll_of_res in
   disconnect conn;
-  Lwt.return (List.map (available_leg_of_results) res)
+  let available_legs =
+    (List.map (available_leg_of_results) res)
+    |> List.filter (fun x ->
+      x.departure_date.year >= y &&
+      x.departure_date.month >= m &&
+      x.departure_date.day >= d
+    )
+  in
+  Lwt.return available_legs
