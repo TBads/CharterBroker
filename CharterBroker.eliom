@@ -19,6 +19,9 @@ module CharterBroker_app =
 let main_service =
   Eliom_service.App.service ~path:[] ~get_params:Eliom_parameter.unit ()
 
+let available_leg_service =
+  Eliom_service.App.service ~path:["available_leg"] ~get_params:Eliom_parameter.unit ()
+
 (* Action to write the request for quote to the db and send an e-mail *)
 let request_for_quote_action =
   Eliom_service.Http.post_coservice' ~post_params:(string "first_name" **
@@ -30,6 +33,17 @@ let request_for_quote_action =
                                                    string "departure_date" **
                                                    string "return_date" **
                                                    string "number_of_passengers"
+                                                  ) ()
+
+(* Action to write available legs to the db *)
+let list_available_leg_action =
+  Eliom_service.Http.post_coservice' ~post_params:(string "departure_city" **
+                                                   string "arrival_city" **
+                                                   int "departure_year" **
+                                                   int "departure_month" **
+                                                   int "departure_day" **
+                                                   string "available_seats" **
+                                                   string "aircraft_type"
                                                   ) ()
 
 (* Bootstrap CDN link *)
@@ -168,10 +182,139 @@ let request_for_quote_form =
      ]
   )
 
+let list_available_leg_form =
+  Eliom_content.Html5.F.post_form ~service:list_available_leg_action ~port:Config.port
+  (
+    fun (departure_city,
+         (arrival_city,
+          (departure_year,
+           (departure_month,
+            (departure_day,
+             (available_seats,
+              aircraft_type)))))) ->
+      [div ~a:[a_id "rfq_form_outer_div"]
+       [div ~a:[a_class ["panel panel-primary"]; a_id "rfq_panel"]
+        [div ~a:[a_class ["panel-heading"]; a_id "rfq_heading"]
+         [h3 ~a:[a_class ["panel-title"; "text-center"]; a_id "rfq_title"]
+          [pcdata "List an Available Leg"]
+         ];
+
+         div ~a:[a_class ["panel-body"]; a_style "border-radius: 10px; background: transparent"]
+         [
+
+          div ~a:[a_class ["form-group"]]
+          [div ~a:[a_class ["input-group"]]
+           [Raw.span ~a:[a_class ["input-group-addon"]]
+            [Raw.span ~a:[a_class ["glyphicon glyphicon-export"]] []
+            ];
+            string_input ~a:[a_class ["form-control"]; a_placeholder "Departure City"]
+              ~input_type:`Text ~name:departure_city ()
+           ]
+          ];
+
+          div ~a:[a_class ["form-group"]]
+          [div ~a:[a_class ["input-group"]]
+           [Raw.span ~a:[a_class ["input-group-addon"]]
+            [Raw.span ~a:[a_class ["glyphicon glyphicon-import"]] []
+            ];
+            string_input ~a:[a_class ["form-control"]; a_placeholder "Arrival City"]
+              ~input_type:`Text ~name:arrival_city ()
+           ]
+          ];
+
+          div ~a:[a_class ["form-group"]]
+          [div ~a:[a_class ["input-group"]]
+           [Raw.span ~a:[a_class ["input-group-addon"]]
+            [Raw.span ~a:[a_class ["glyphicon glyphicon-calendar"]] []
+            ];
+            int_input ~a:[a_class ["form-control"]; a_placeholder "Departure Year"]
+              ~input_type:`Text ~name:departure_year ()
+           ]
+          ];
+
+          div ~a:[a_class ["form-group"]]
+          [div ~a:[a_class ["input-group"]]
+           [Raw.span ~a:[a_class ["input-group-addon"]]
+            [Raw.span ~a:[a_class ["glyphicon glyphicon-calendar"]] []
+            ];
+            int_input ~a:[a_class ["form-control"]; a_placeholder "Departure Month"]
+              ~input_type:`Text ~name:departure_month ()
+           ]
+          ];
+
+          div ~a:[a_class ["form-group"]]
+          [div ~a:[a_class ["input-group"]]
+           [Raw.span ~a:[a_class ["input-group-addon"]]
+            [Raw.span ~a:[a_class ["glyphicon glyphicon-calendar"]] []
+            ];
+            int_input ~a:[a_class ["form-control"]; a_placeholder "Departure Day"]
+              ~input_type:`Text ~name:departure_day ()
+           ]
+          ];
+
+          div ~a:[a_class ["form-group"]]
+          [div ~a:[a_class ["input-group"]]
+           [Raw.span ~a:[a_class ["input-group-addon"]]
+            [Raw.span ~a:[a_class ["glyphicon glyphicon-plus"]] []
+            ];
+            string_input ~a:[a_class ["form-control"]; a_placeholder "Available Seats"]
+              ~input_type:`Text ~name:available_seats ()
+           ]
+          ];
+
+          div ~a:[a_class ["form-group"]]
+          [div ~a:[a_class ["input-group"]]
+           [Raw.span ~a:[a_class ["input-group-addon"]]
+            [Raw.span ~a:[a_class ["glyphicon glyphicon-plus"]] []
+            ];
+            string_input ~a:[a_class ["form-control"]; a_placeholder "Aircraft Type"]
+              ~input_type:`Text ~name:aircraft_type ()
+           ]
+          ];
+
+         div ~a:[a_id "rfq_button_div"]
+         [button ~a:[a_class ["btn btn-lg btn-success btn-block"];
+                     a_id "rfq_submit_button"]
+                 ~button_type:`Submit [pcdata "Submit"]
+         ]
+        ]
+       ]
+      ]
+     ]
+  )
+
+(* TODO: Add cost per seat, better to fill a few seats than none *)
+let available_legs_table () =
+  let open Db_funs in
+  lwt legs = available_legs () in
+  let tr_of_leg leg =
+    tr [
+      td ~a:[a_id "legs_tbl_td"] [pcdata leg.departure_city];
+      td ~a:[a_id "legs_tbl_td"] [pcdata leg.arrival_city];
+      td ~a:[a_id "legs_tbl_td"] [pcdata (string_of_date leg.departure_date)];
+      td ~a:[a_id "legs_tbl_td"] [pcdata (string_of_int leg.available_seats)];
+      td ~a:[a_id "legs_tbl_td"] [pcdata leg.aircraft_type]
+    ]
+  in
+  let t_head =
+    thead
+     [tr
+      [th ~a:[a_id "legs_tbl_header"] [pcdata "Departure City"];
+       th ~a:[a_id "legs_tbl_header"] [pcdata "Arrival City"];
+       th ~a:[a_id "legs_tbl_header"] [pcdata "Departure Date"];
+       th ~a:[a_id "legs_tbl_header"] [pcdata "Available Seats"];
+       th ~a:[a_id "legs_tbl_header"] [pcdata "Aircraft Type"]
+      ]
+     ]
+  in
+  let tbl_rows = List.map (tr_of_leg) legs in
+  Lwt.return @@ table ~a:[a_class ["table table-striped"]] ~thead:t_head tbl_rows
+
 let () =
   CharterBroker_app.register
     ~service:main_service
     (fun () () ->
+      lwt avail_legs_tbl = available_legs_table () in
       Lwt.return
         (Eliom_tools.F.html
            ~title:"Private Air Charters"
@@ -215,7 +358,30 @@ let () =
                    [pcdata "Request a FREE quote for your trip today!"]
                 ]
 
-              ]
+              ];
+              div ~a:[a_id "available_legs_title"] [h1 [pcdata "Discounted One Way Flights"]];
+              div ~a:[a_id "available_legs_info"]
+              [h4
+               [pcdata "Please email uscharterbrokers@gmail.com to book one of the below flights."]
+              ];
+              div ~a:[a_id "available_legs_table"] [avail_legs_tbl]
+             ]
+            ]
+           )))
+
+let () =
+  CharterBroker_app.register
+    ~service:available_leg_service
+    (fun () () ->
+      Lwt.return
+        (Eliom_tools.F.html
+           ~title:"List available legs"
+           ~css:[["css";"CharterBroker.css"]]
+           ~other_head:[bootstrap_cdn_link; font_awesome_cdn_link]
+           Html5.F.(body [
+             div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
+             div ~a:[a_id "main_pg_outer_div"]
+             [div ~a:[a_id "available_leg_form_div"] [list_available_leg_form ()];
              ]
             ]
            )))
@@ -280,4 +446,36 @@ let () =
         with _ -> Lwt_io.print "Error: send_mail.py did not work"
       in
       Lwt.return ()
+  )
+
+(* Write the available leg to the database *)
+let () =
+  Eliom_registration.Action.register
+  ~options:`Reload
+  ~service:list_available_leg_action
+  (fun () (departure_city,
+           (arrival_city,
+            (departure_year,
+             (departure_month,
+              (departure_day,
+               (available_seats,
+                aircraft_type)))))) ->
+    let open Db_funs in
+    (*lwt write_result = *)
+      write_available_leg
+        ~departure_city
+        ~arrival_city
+        ~departure_year
+        ~departure_month
+        ~departure_day
+        ~available_seats
+        ~aircraft_type
+    >>= fun db_write_result -> Lwt.return_unit
+    (*
+    Lwt_io.print "\nWriting the data to the database:" >>
+    Lwt_io.print ("\ndeparture_city: " ^ departure_city) >>
+    Lwt_io.print ("\narrival_city: " ^ arrival_city) >>
+    Lwt_io.print ("\ndeparture_date: " ^ departure_year) >>
+    Lwt_io.print ("\navailable_seats: " ^ available_seats) >>
+    Lwt_io.print ("\naircraft_type: " ^ aircraft_type)*)
   )
