@@ -10,6 +10,64 @@ type check = Success | CheckFailure of string
 
 type db_write_result = DbWriteSuccess | DbWriteFail of string
 
+type date = {
+  year : int;
+  month : int;
+  day : int;
+}
+
+type available_leg = {
+  leg_number : int;
+  departure_city : string;
+  arrival_city : string;
+  departure_date : date;
+  available_seats : int;
+  aircraft_type : string
+}
+
+let string_of_month m =
+match m with
+| 1 -> "January"
+| 2 -> "February"
+| 3 -> "March"
+| 4 -> "April"
+| 5 -> "May"
+| 6 -> "June"
+| 7 -> "July"
+| 8 -> "August"
+| 9 -> "September"
+| 10 -> "October"
+| 11 -> "November"
+| 12 -> "December"
+| _ -> failwith ("ERROR: invalid month " ^ string_of_int m  ^ " passed into string_of_month.")
+
+let string_of_date d =
+  string_of_int d.day ^ "-" ^
+  string_of_month d.month ^ "-" ^
+  string_of_int d.year
+
+let string_of_option so =
+  match so with
+  | Some s -> s
+  | None -> ""
+
+let sll_of_res res =
+  Mysql.map res (fun a -> Array.to_list a)
+  |> List.map (List.map string_of_option)
+
+let available_leg_of_results sl = {
+  leg_number      = int_of_string @@ List.nth sl 0;
+  departure_city  = List.nth sl 1;
+  arrival_city    = List.nth sl 2;
+  departure_date  = {
+    year = int_of_string @@ List.nth sl 3;
+    month = int_of_string @@ List.nth sl 4;
+    day = int_of_string @@ List.nth sl 5
+  };
+  available_seats = (try int_of_string @@ List.nth sl 6 with _ -> -1);
+  aircraft_type   = List.nth sl 7
+}
+
 let len_check
   ~first_name
   ~last_name
@@ -123,3 +181,39 @@ let write_request_for_quote
     let _ = exec conn sql_stmt in
     let () = disconnect conn in
     Lwt.return DbWriteSuccess
+
+(* Write a new available leg to the database *)
+let write_available_leg
+  ~departure_city
+  ~arrival_city
+  ~departure_year
+  ~departure_month
+  ~departure_day
+  ~available_seats
+  ~aircraft_type =
+  let conn = connect user_db in
+    let esc s = Mysql.real_escape conn s in
+    let sql_stmt =
+      "INSERT INTO CharterBroker.AvailableLegs " ^
+      "(departure_city, arrival_city, departure_year, departure_month, departure_day, " ^
+      "available_seats, aircraft_type) VALUES ('" ^
+      (esc departure_city) ^ "', '" ^
+      (esc arrival_city) ^ "', " ^
+      (esc @@ string_of_int departure_year) ^ ", " ^
+      (esc @@ string_of_int departure_month) ^ ", " ^
+      (esc @@ string_of_int departure_day) ^ ", " ^
+      (esc available_seats) ^ ", '" ^
+      (esc aircraft_type) ^ "')"
+    in
+    (*Lwt_io.print sql_stmt >>*)
+    let _ = exec conn sql_stmt in
+    let () = disconnect conn in
+    Lwt.return DbWriteSuccess
+
+(* Get the available legs from the database *)
+let available_legs () =
+  let conn = connect user_db in
+  let sql_stmt = "SELECT * FROM CharterBroker.AvailableLegs" in
+  let res = exec conn sql_stmt |> sll_of_res in
+  disconnect conn;
+  Lwt.return (List.map (available_leg_of_results) res)
