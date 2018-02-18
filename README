@@ -6,6 +6,8 @@ Need to launch with command:
 3) sudo make install
 4) sudo PATH=$PATH OCAMLPATH=$OCAMLPATH LD_LIBRARY_PATH=$CAML_LD_LIBRARY_PATH make run.byte &
 
+NOTE: For steps 2 & 3 above, you may need to use the additional path commands specified in step 4
+
 Instructions
 ============
 
