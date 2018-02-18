@@ -24,15 +24,42 @@ body {
 }
 
 #main_header{
-    /*border: 1px solid black;*/
     width: 1000px;
     height: auto;
-    margin: 20px auto;
+    margin: 20px auto 0px auto;
     text-align: center;
-    /*border-radius: 4px;*/
     font-weight: bold;
     font-size: 80px;
     border-bottom: 3px solid #333;
+}
+
+#main_header_contact{
+    width: 1000px;
+    height: 40px;
+    margin: 7px auto;
+    border-bottom: 3px solid #333;
+}
+
+#email_contact{
+    float: left;
+    width: 50%;
+    height: 100%;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    text-shadow: 1px 1px 1px whitesmoke;
+}
+
+#phone_contact{
+    float: right;
+    width: 50%;
+    height: 100%;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    text-shadow: 1px 1px 1px whitesmoke;
 }
 
 #main_header h1 {
@@ -206,7 +233,7 @@ body {
   margin: auto;
 }
 
-#legs_tbl_td{
+#legs_tbl_td {
   text-align: center;
   font-size: 20px;
   color: whitesmoke;
