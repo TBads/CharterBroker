@@ -322,6 +322,10 @@ let () =
            ~other_head:[bootstrap_cdn_link; font_awesome_cdn_link]
            Html5.F.(body [
              div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
+             div ~a:[a_id "main_header_contact"]
+             [div ~a:[a_id "email_contact"] [pcdata "Email: john@uscharterbrokers.com"];
+              div ~a:[a_id "phone_contact"] [pcdata "Phone: (806) 680-5212"];
+             ];
              div ~a:[a_id "main_pg_outer_div"]
              [div ~a:[a_id "form_div"] [request_for_quote_form ()];
               div ~a:[a_id "info_div"]
@@ -355,14 +359,16 @@ let () =
                 div ~a:[a_id "main_pg_bullets"]
                 [div ~a:[a_class ["glyphicon glyphicon-menu-right"]; a_id "glyphs"] [];
                  h3 ~a:[a_id "bullet_text"]
-                   [pcdata "Request a FREE quote for your trip today!"]
+                   [pcdata "Request a free no-obligation quote for your trip today."]
                 ]
 
               ];
-              div ~a:[a_id "available_legs_title"] [h1 [pcdata "Discounted One Way Flights"]];
+              div ~a:[a_id "available_legs_title"] [h1 [pcdata "Available Empty Legs"]];
               div ~a:[a_id "available_legs_info"]
               [h4
-               [pcdata "Please email uscharterbrokers@gmail.com to book one of the below flights."]
+               [pcdata ("Empty leg flights are often discounted. " ^
+                        "Contact us by phone or email about any of the flights listed below.")
+               ]
               ];
               div ~a:[a_id "available_legs_table"] [avail_legs_tbl]
              ]
