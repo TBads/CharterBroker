@@ -54,9 +54,19 @@ let bootstrap_cdn_link =
 
 (* FontAwesome CDN link *)
 let font_awesome_cdn_link =
-    let cdn_link = "//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" in
+    let cdn_link = "//https://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" in
       link ~rel:[`Stylesheet] ~href:(Xml.uri_of_string cdn_link)
         ()
+
+let avinode_js =
+  let url = "https://apps.avinode.com/webapp/rest/bootstrap?Avinode-WEB-APP=eyJraWQiOiIxNkVBQkQ5RS1BRjYyLTQ4NTEtODk5Qi1BM0UwMThGRjYxNDciLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJmMGZmZjYxMC05YWU5LTQyNTEtYTMyOC1jMzc4ZmIyNzJkNzQiLCJhdmlkb21haW4iOiIuYXZpbm9kZS5jb20iLCJhdml0ZW5hbnQiOjExMzU3LCJpc3MiOiJhdmlub2RlIiwiYXZpdHlwZSI6MTAsImF2aW5vbmNlIjoiMGI1NGExMDctNTA1My00ZDg1LTg4M2QtZTQzYzYxNmY2OGRhIn0.a1RxbQFm1AEzEbk0iQb_ifTAkSLZtA2XZMVro34TF06EowitV_NsVEhiswp6LYTQSZW-ovpeBdv9dM6ppyj9tGPhC1nLwHbN_G6PhnGfYYxXIOnJb3VdZFFz23rNq6xTrG7OMZUVYIi419mntgc03z6vG9RGYcJbaxAmkJxgToJO2O68-EQOGmw-CCdAcCDQkGaCHJbuXVHGw-Ra7bJfvr0aeB-8QbXKQuZ3dINiqU5xLhNWbOsxrhviu7D_1cgyo4j5KifVu_stMkRpsAA_kt-VP_utIqNMa6CfvYdt4F_RSA4IBYGKJpZr0eXHTnmv8xQ_nQaRqL9db-2lGedylw"
+  in
+  js_script ~uri:(Xml.uri_of_string url) ()
+
+let secure_css_header =
+  let css_addr = "https://uscharterbrokers.com/css/CharterBroker.css" in
+    link ~rel:[`Stylesheet] ~href:(Xml.uri_of_string css_addr)
+    ()
 
 let request_for_quote_form =
   Eliom_content.Html5.F.post_form ~service:request_for_quote_action ~port:Config.port
@@ -318,16 +328,19 @@ let () =
       Lwt.return
         (Eliom_tools.F.html
            ~title:"Private Air Charters"
-           ~css:[["css";"CharterBroker.css"]]
-           ~other_head:[bootstrap_cdn_link; font_awesome_cdn_link]
+           ~css:[]
+           ~other_head:[bootstrap_cdn_link; font_awesome_cdn_link; avinode_js; secure_css_header]
            Html5.F.(body [
              div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
              div ~a:[a_id "main_header_contact"]
              [div ~a:[a_id "email_contact"] [pcdata "Email: john@uscharterbrokers.com"];
-              div ~a:[a_id "phone_contact"] [pcdata "Phone: (806) 680-5212"];
+              div ~a:[a_id "phone_contact"] [pcdata "Phone: (832) 280-JETS (5387)"];
              ];
              div ~a:[a_id "main_pg_outer_div"]
-             [div ~a:[a_id "form_div"] [request_for_quote_form ()];
+             [
+              div ~a:[a_id "avinodeApp"] [];
+              avinode_js;
+              (*div ~a:[a_id "form_div"] [request_for_quote_form ()];*)
               div ~a:[a_id "info_div"]
               [
                 div ~a:[a_id "main_pg_bullets"]
@@ -366,11 +379,12 @@ let () =
               div ~a:[a_id "available_legs_title"] [h1 [pcdata "Available Empty Legs"]];
               div ~a:[a_id "available_legs_info"]
               [h4
-               [pcdata ("Empty leg flights are often discounted. " ^
-                        "Contact us by phone or email about any of the flights listed below.")
+               [pcdata ("Contact us by phone or email about any of the flights listed below.")
                ]
               ];
-              div ~a:[a_id "available_legs_table"] [avail_legs_tbl]
+              div ~a:[a_id "available_legs_table"] [avail_legs_tbl];
+              div ~a:[a_id "llc_footer"] [pcdata "U.S. Charter Brokers LLC"];
+              div ~a:[a_id "disclaimer"] [pcdata "U.S. Charter Brokers LLC is an air charter broker, serving as an agent. U.S. Charter Brokers LLC does not own or operate any aircraft. All aircraft are operated by licensed and federally regulated Part 135 air charter operators."]
              ]
             ]
            )))
