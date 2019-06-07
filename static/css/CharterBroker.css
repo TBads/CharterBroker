@@ -159,8 +159,8 @@ body {
 
 #info_div {
     margin-top: 40px;
-    width: 43%;
-    float: right;
+    width: 80%;
+    float: left;
 }
 
 #info_div h3 {
@@ -171,7 +171,7 @@ body {
 
 #main_pg_bullets {
   /*border: 2px solid red;*/
-  height: 100px;
+  height: 60px;
   width: 100%;
   vertical-align: middle;
 }
@@ -241,4 +241,14 @@ body {
   vertical-align: middle;
   text-shadow: 2px 2px 4px #333;
   margin: auto;
+}
+
+#llc_footer {
+    color: white;
+    text-align: center;
+    margin: 200px auto 20px auto;
+}
+
+#disclaimer {
+    color: white;
 }
