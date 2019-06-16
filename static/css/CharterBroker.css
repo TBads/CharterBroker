@@ -6,15 +6,12 @@
 }
 
 html {
-  /*background-image: url(pexels-photo-230976.jpeg);*/
-  /*background-repeat: no-repeat;*/
     background: url(pexels-photo-230976.jpeg) no-repeat center center fixed;
     background-size: cover;
 }
 
 body {
     background-color: transparent !important;
-    /*background: -moz-linear-gradient(right center, black, transparent, black) no-repeat center fixed;*/
     background-size: cover;
 }
 
@@ -251,4 +248,53 @@ body {
 
 #disclaimer {
     color: white;
+}
+
+@media (max-width: 400px) {
+    div#avinodeApp {
+        max-width: 360px;
+        margin: auto;
+    }
+}
+@media (min-width: 401px) and (max-width: 500px) {
+    div#avinodeApp {
+        max-width: 360px;
+        margin: auto;
+    }
+}
+@media (min-width: 501px) and (max-width: 600px) {
+    div#avinodeApp {
+        max-width: 450px;
+        margin: auto;
+    }
+}
+@media (min-width: 601px) and (max-width: 700px) {
+    div#avinodeApp {
+        max-width: 540px;
+        margin: auto;
+    }
+}
+@media (min-width: 701px) and (max-width: 800px) {
+    div#avinodeApp {
+        max-width: 630px;
+        margin: auto;
+    }
+}
+@media (min-width: 801px) and (max-width: 900px) {
+    div#avinodeApp {
+        max-width: 720px;
+        margin: auto;
+    }
+}
+@media (min-width: 901px) and (max-width: 1000px) {
+    div#avinodeApp {
+        max-width: 810px;
+        margin: auto;
+    }
+}
+@media (min-width: 1000px) {
+    div#avinodeApp {
+        max-width: 1000px;
+        margin: auto;
+    }
 }
