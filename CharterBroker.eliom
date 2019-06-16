@@ -5,11 +5,6 @@
   open Eliom_parameter
 }}
 
-module Config =
-  struct
-    let port = 80 (* port access to the website *)
-  end
-
 module CharterBroker_app =
   Eliom_registration.App (
     struct
@@ -63,13 +58,36 @@ let avinode_js =
   in
   js_script ~uri:(Xml.uri_of_string url) ()
 
+let localhost_css_header =
+  let css_addr = make_uri (Eliom_service.static_dir ()) ["css"; "CharterBroker.css"] in
+  link ~rel:[`Stylesheet] ~href:css_addr
+  ()
+
 let secure_css_header =
   let css_addr = "https://uscharterbrokers.com/css/CharterBroker.css" in
     link ~rel:[`Stylesheet] ~href:(Xml.uri_of_string css_addr)
     ()
 
+let other_head =
+  let open Config in
+  match env with
+  | Dev -> [
+    bootstrap_cdn_link;
+    font_awesome_cdn_link;
+    avinode_js;
+    localhost_css_header;
+    (* TODO: viewport tag*)
+  ]
+  | Prod -> [
+    bootstrap_cdn_link;
+    font_awesome_cdn_link;
+    avinode_js;
+    secure_css_header;
+    (* TODO: viewport tag*)
+  ]
+
 let request_for_quote_form =
-  Eliom_content.Html5.F.post_form ~service:request_for_quote_action ~port:Config.port
+  Eliom_content.Html5.F.post_form ~service:request_for_quote_action
   (
     fun (first_name,
          (last_name,
@@ -193,7 +211,7 @@ let request_for_quote_form =
   )
 
 let list_available_leg_form =
-  Eliom_content.Html5.F.post_form ~service:list_available_leg_action ~port:Config.port
+  Eliom_content.Html5.F.post_form ~service:list_available_leg_action
   (
     fun (departure_city,
          (arrival_city,
@@ -329,7 +347,7 @@ let () =
         (Eliom_tools.F.html
            ~title:"Private Air Charters"
            ~css:[]
-           ~other_head:[bootstrap_cdn_link; font_awesome_cdn_link; avinode_js; secure_css_header]
+           ~other_head:other_head
            Html5.F.(body [
              div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
              div ~a:[a_id "main_header_contact"]
@@ -397,7 +415,7 @@ let () =
         (Eliom_tools.F.html
            ~title:"List available legs"
            ~css:[["css";"CharterBroker.css"]]
-           ~other_head:[bootstrap_cdn_link; font_awesome_cdn_link]
+           ~other_head:other_head
            Html5.F.(body [
              div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
              div ~a:[a_id "main_pg_outer_div"]
