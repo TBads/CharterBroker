@@ -351,8 +351,14 @@ let () =
            Html5.F.(body [
              div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
              div ~a:[a_id "main_header_contact"]
-             [div ~a:[a_id "email_contact"] [pcdata "Email: john@uscharterbrokers.com"];
-              div ~a:[a_id "phone_contact"] [pcdata "Phone: (832) 280-JETS (5387)"];
+             [div ~a:[a_id "email_contact"]
+              [Raw.a ~a:[a_href (Raw.uri_of_string "mailto:john@uscharterbrokers.com")]
+               [pcdata "Email: john@uscharterbrokers.com"]
+              ];
+              div ~a:[a_id "phone_contact"]
+              [Raw.a ~a:[a_href (Raw.uri_of_string "tel:18322805387")]
+               [pcdata "Phone: (832) 280-JETS (5387)"]
+              ];
              ];
              div ~a:[a_id "main_pg_outer_div"]
              [
