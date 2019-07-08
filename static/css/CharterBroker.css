@@ -37,7 +37,7 @@ body {
     border-bottom: 3px solid #333;
 }
 
-#email_contact{
+#email_contact {
     float: left;
     width: 50%;
     height: 100%;
@@ -48,7 +48,12 @@ body {
     text-shadow: 1px 1px 1px whitesmoke;
 }
 
-#phone_contact{
+div#email_contact a {
+    color: #333;
+    text-decoration: none;
+}
+
+#phone_contact {
     float: right;
     width: 50%;
     height: 100%;
@@ -57,6 +62,11 @@ body {
     font-weight: bold;
     font-size: 20px;
     text-shadow: 1px 1px 1px whitesmoke;
+}
+
+div#phone_contact a {
+    color: #333;
+    text-decoration: none;
 }
 
 #main_header h1 {
@@ -296,5 +306,6 @@ body {
     div#avinodeApp {
         max-width: 1000px;
         margin: auto;
+        border-radius: 2px;
     }
 }
