@@ -316,7 +316,7 @@ let available_legs_table () =
   let open Db_funs in
   lwt legs = available_legs () in
   let tr_of_leg leg =
-    tr [
+    tr ~a:[a_style "background-color: transparent"] [
       td ~a:[a_id "legs_tbl_td"] [pcdata leg.departure_city];
       td ~a:[a_id "legs_tbl_td"] [pcdata leg.arrival_city];
       td ~a:[a_id "legs_tbl_td"] [pcdata (string_of_date leg.departure_date)];
