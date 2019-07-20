@@ -210,6 +210,29 @@ let write_available_leg
     let () = disconnect conn in
     Lwt.return DbWriteSuccess
 
+(* return false if the date is in the past *)
+(* y m d are the current year month and day *)
+let filter_by_dates y m d x =
+  if x.departure_date.year < y
+  then false
+  else (
+    if x.departure_date.year > y
+    then true
+    else (
+      if x.departure_date.month < m
+      then false
+      else (
+        if x.departure_date.month > m
+        then true
+        else (
+          if x.departure_date.day >= d
+          then true
+          else false
+        )
+      )
+    )
+  )
+
 (* Get the available legs from the database *)
 let available_legs () =
   let open Unix in
@@ -221,10 +244,6 @@ let available_legs () =
   disconnect conn;
   let available_legs =
     (List.map (available_leg_of_results) res)
-    |> List.filter (fun x ->
-      x.departure_date.year >= y &&
-      x.departure_date.month >= m &&
-      x.departure_date.day >= d
-    )
+    |> List.filter (filter_by_dates y m d)
   in
   Lwt.return available_legs
