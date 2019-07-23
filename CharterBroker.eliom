@@ -17,6 +17,9 @@ let main_service =
 let available_leg_service =
   Eliom_service.App.service ~path:["available_leg"] ~get_params:Eliom_parameter.unit ()
 
+let faq_service =
+  Eliom_service.App.service ~path:["faq"] ~get_params:Eliom_parameter.unit ()
+
 (* Action to write the request for quote to the db and send an e-mail *)
 let request_for_quote_action =
   Eliom_service.Http.post_coservice' ~post_params:(string "first_name" **
@@ -349,17 +352,30 @@ let () =
            ~css:[]
            ~other_head:other_head
            Html5.F.(body [
+
              div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
+
              div ~a:[a_id "main_header_contact"]
-             [div ~a:[a_id "email_contact"]
+             [
+
+              div ~a:[a_id "email_contact"]
               [Raw.a ~a:[a_href (Raw.uri_of_string "mailto:john@uscharterbrokers.com")]
                [pcdata "Email: john@uscharterbrokers.com"]
               ];
+
               div ~a:[a_id "phone_contact"]
               [Raw.a ~a:[a_href (Raw.uri_of_string "tel:18322805387")]
                [pcdata "Phone: (832) 280-JETS (5387)"]
               ];
+
+              div ~a:[a_id "faq_link_div"]
+              [a ~a:[a_class ["faq_link"]] ~service:faq_service
+               [pcdata "FAQ"]
+               ()
+              ];
+
              ];
+
              div ~a:[a_id "main_pg_outer_div"]
              [
               div ~a:[a_id "avinodeApp"] [];
@@ -411,6 +427,110 @@ let () =
               div ~a:[a_id "disclaimer"] [pcdata "U.S. Charter Brokers LLC is an air charter broker, serving as an agent. U.S. Charter Brokers LLC does not own or operate any aircraft. All aircraft are operated by licensed and federally regulated Part 135 air charter operators."]
              ]
             ]
+           )))
+
+
+let () =
+  CharterBroker_app.register
+    ~service:faq_service
+    (fun () () ->
+      Lwt.return
+        (Eliom_tools.F.html
+           ~title:"FAQ"
+           ~css:[["css";"CharterBroker.css"]]
+           ~other_head:other_head
+           Html5.F.(body [
+             div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
+
+             div ~a:[a_id "main_header_contact"]
+             [
+
+              div ~a:[a_id "email_contact"]
+              [Raw.a ~a:[a_href (Raw.uri_of_string "mailto:john@uscharterbrokers.com")]
+               [pcdata "Email: john@uscharterbrokers.com"]
+              ];
+
+              div ~a:[a_id "phone_contact"]
+              [Raw.a ~a:[a_href (Raw.uri_of_string "tel:18322805387")]
+               [pcdata "Phone: (832) 280-JETS (5387)"]
+              ];
+
+              div ~a:[a_id "faq_link_div"]
+              [a ~a:[a_class ["faq_link"]] ~service:faq_service
+               [pcdata "FAQ"]
+               ()
+              ];
+
+             ];
+
+             div ~a:[a_id "main_pg_outer_div"]
+             [
+              div ~a:[a_id "info_div"]
+              [
+               h2 ~a:[a_id "faq_text"]
+               [pcdata "Why Choose U.S. Charter Brokers?"];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "As air charter brokers, we have several advantages."];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "-We represent the buying power of our entire clientele instead of just one person, giving an advantage when negotiating the best price for our clients."];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "-We have access to empty leg flights across the country to help find great pricing for you."];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "-We give you access to nearly every type of aircraft, instead of being limited to the few aircraft in your local charter operator’s fleet."];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "-We do not force you to sign a membership contract."];
+
+               h2 ~a:[a_id "faq_text"]
+               [pcdata "What Is An Air Charter Broker?"];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "An Air Charter Broker works directly with a client to find the right aircraft for your custom-tailored trip. We have access to thousands of charter aircraft operated by the best aircraft charter operators across the globe and we work directly with those operators to negotiate the best price on your behalf, taking the stress and work out of finding your aircraft."];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "We only work with reputable charter operators, and often have great, long-standing business relationships with many charter operators, helping get you from point A to B as safely, quickly, and smoothly as possible."];
+
+               h2 ~a:[a_id "faq_text"]
+               [pcdata "Advantages Of Using Brokers Vs Direct Charter or Membership"];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "Aircraft Advantages:"];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "-You are not limited to the aircraft that your local charter/membership service operates. You can select from a TurboProp for a quick weekend out to your ranch or favorite skiing destination, all the way up to Gulstream G650, Falcon 7X, Global, and other aircraft that can take you wherever you choose in the world."];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata  "Financial Advantages:"];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "-You pay on a per-flight basis, no upfront 25/50/100 hour commitment"];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "-No inflated hourly costs that can be associated with other membership services"];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "-No membership contract"];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "-No initial membership fee"];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "-No monthly/annual dues"];
+
+               h3 ~a:[a_id "faq_text"]
+               [pcdata "Feel free to call and compare our pricing to your current membership rates."];
+
+              div ~a:[a_id "llc_footer"] [pcdata "U.S. Charter Brokers LLC"];
+              div ~a:[a_id "disclaimer"] [pcdata "U.S. Charter Brokers LLC is an air charter broker, serving as an agent. U.S. Charter Brokers LLC does not own or operate any aircraft. All aircraft are operated by licensed and federally regulated Part 135 air charter operators."]
+             ]
+
+            ]
+           ]
+
            )))
 
 let () =
@@ -505,6 +625,12 @@ let () =
                (available_seats,
                 aircraft_type)))))) ->
     let open Db_funs in
+    (*Lwt_io.print "\nWriting the data to the database:" >>
+    Lwt_io.print ("\ndeparture_city: " ^ departure_city) >>
+    Lwt_io.print ("\narrival_city: " ^ arrival_city) >>
+    Lwt_io.print ("\ndeparture_date: " ^ departure_year) >>
+    Lwt_io.print ("\navailable_seats: " ^ available_seats) >>
+    Lwt_io.print ("\naircraft_type: " ^ aircraft_type) >>*)
     (*lwt write_result = *)
       write_available_leg
         ~departure_city
