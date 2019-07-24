@@ -51,6 +51,7 @@ body {
 div#email_contact a {
     color: whitesmoke;
     text-decoration: none;
+    text-shadow: 2px 2px 4px #333;
 }
 
 #phone_contact {
@@ -67,11 +68,12 @@ div#email_contact a {
 div#phone_contact a {
     color: whitesmoke;
     text-decoration: none;
+    text-shadow: 2px 2px 4px #333;
 }
 
 #faq_link_div {
     float: left;
-    width: 20%;
+    width: 10%;
     height: 100%;
     margin: auto;
     text-align: center;
@@ -83,6 +85,24 @@ div#phone_contact a {
 a.faq_link {
     color: whitesmoke;
     text-decoration: none;
+    text-shadow: 2px 2px 4px #333;
+}
+
+#home_link_div {
+    float: left;
+    width: 10%;
+    height: 100%;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    /*text-shadow: 1px 1px 1px whitesmoke;*/
+}
+
+a.home_link {
+    color: whitesmoke;
+    text-decoration: none;
+    text-shadow: 2px 2px 4px #333;
 }
 
 #main_header h1 {
