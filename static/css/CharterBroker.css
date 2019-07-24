@@ -296,6 +296,17 @@ h2#faq_text {
     margin: 200px auto 20px auto;
 }
 
+#privacy_footer {
+    color: white;
+    text-align: center;
+    margin: auto auto 20px auto;
+    text-decoration: underline;
+}
+
+div#privacy_footer a {
+    color: white;
+}
+
 #disclaimer {
     color: white;
 }
