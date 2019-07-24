@@ -57,7 +57,7 @@ let bootstrap_cdn_link =
 
 (* FontAwesome CDN link *)
 let font_awesome_cdn_link =
-    let cdn_link = "//https://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" in
+    let cdn_link = "https://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" in
       link ~rel:[`Stylesheet] ~href:(Xml.uri_of_string cdn_link)
         ()
 
