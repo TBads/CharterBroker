@@ -76,6 +76,11 @@ let secure_css_header =
     link ~rel:[`Stylesheet] ~href:(Xml.uri_of_string css_addr)
     ()
 
+let secure_js_link =
+  let js_addr = "https://uscharterbrokers.com/CharterBroker.js" in
+  let uri = Xml.uri_of_string js_addr in
+  js_script ~uri:uri ()
+
 let other_head =
   let open Config in
   match env with
@@ -90,6 +95,7 @@ let other_head =
     bootstrap_cdn_link;
     font_awesome_cdn_link;
     avinode_js;
+    secure_js_link;
     secure_css_header;
     (* TODO: viewport tag*)
   ]
