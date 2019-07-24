@@ -346,6 +346,36 @@ let available_legs_table () =
   let tbl_rows = List.map (tr_of_leg) legs in
   Lwt.return @@ table ~a:[a_class ["table table-striped"]] ~thead:t_head tbl_rows
 
+
+let main_header = [
+  div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
+    div ~a:[a_id "main_header_contact"]
+    [
+      div ~a:[a_id "home_link_div"]
+      [a ~a:[a_class ["home_link"]] ~service:main_service
+        [pcdata "Home"]
+        ()
+      ];
+
+      div ~a:[a_id "email_contact"]
+      [Raw.a ~a:[a_href (Raw.uri_of_string "mailto:john@uscharterbrokers.com")]
+        [pcdata "Email: john@uscharterbrokers.com"]
+      ];
+
+      div ~a:[a_id "phone_contact"]
+      [Raw.a ~a:[a_href (Raw.uri_of_string "tel:18322805387")]
+        [pcdata "Phone: (832) 280-JETS (5387)"]
+      ];
+
+      div ~a:[a_id "faq_link_div"]
+      [a ~a:[a_class ["faq_link"]] ~service:faq_service
+        [pcdata "FAQ"]
+        ()
+      ];
+
+    ];
+  ]
+
 let () =
   CharterBroker_app.register
     ~service:main_service
@@ -356,31 +386,10 @@ let () =
            ~title:"Private Air Charters"
            ~css:[]
            ~other_head:other_head
-           Html5.F.(body [
+           Html5.F.(body (
 
-             div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
-
-             div ~a:[a_id "main_header_contact"]
-             [
-
-              div ~a:[a_id "email_contact"]
-              [Raw.a ~a:[a_href (Raw.uri_of_string "mailto:john@uscharterbrokers.com")]
-               [pcdata "Email: john@uscharterbrokers.com"]
-              ];
-
-              div ~a:[a_id "phone_contact"]
-              [Raw.a ~a:[a_href (Raw.uri_of_string "tel:18322805387")]
-               [pcdata "Phone: (832) 280-JETS (5387)"]
-              ];
-
-              div ~a:[a_id "faq_link_div"]
-              [a ~a:[a_class ["faq_link"]] ~service:faq_service
-               [pcdata "FAQ"]
-               ()
-              ];
-
-             ];
-
+            main_header @
+            [
              div ~a:[a_id "main_pg_outer_div"]
              [
               div ~a:[a_id "avinodeApp"] [];
@@ -433,7 +442,7 @@ let () =
               div ~a:[a_id "disclaimer"] [pcdata "U.S. Charter Brokers LLC is an air charter broker, serving as an agent. U.S. Charter Brokers LLC does not own or operate any aircraft. All aircraft are operated by licensed and federally regulated Part 135 air charter operators."]
              ]
             ]
-           )))
+           ))))
 
 
 let () =
@@ -445,30 +454,9 @@ let () =
            ~title:"FAQ"
            ~css:[["css";"CharterBroker.css"]]
            ~other_head:other_head
-           Html5.F.(body [
-             div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
-
-             div ~a:[a_id "main_header_contact"]
-             [
-
-              div ~a:[a_id "email_contact"]
-              [Raw.a ~a:[a_href (Raw.uri_of_string "mailto:john@uscharterbrokers.com")]
-               [pcdata "Email: john@uscharterbrokers.com"]
-              ];
-
-              div ~a:[a_id "phone_contact"]
-              [Raw.a ~a:[a_href (Raw.uri_of_string "tel:18322805387")]
-               [pcdata "Phone: (832) 280-JETS (5387)"]
-              ];
-
-              div ~a:[a_id "faq_link_div"]
-              [a ~a:[a_class ["faq_link"]] ~service:faq_service
-               [pcdata "FAQ"]
-               ()
-              ];
-
-             ];
-
+           Html5.F.(body (
+           main_header @
+            [
              div ~a:[a_id "main_pg_outer_div"]
              [
               div ~a:[a_id "info_div"]
@@ -537,7 +525,7 @@ let () =
             ]
            ]
 
-           )))
+           ))))
 
 let () =
   CharterBroker_app.register
@@ -548,30 +536,9 @@ let () =
            ~title:"Privacy Policy"
            ~css:[["css";"CharterBroker.css"]]
            ~other_head:other_head
-           Html5.F.(body [
-             div ~a:[a_id "main_header"] [pcdata "U.S. Charter Brokers"];
-
-             div ~a:[a_id "main_header_contact"]
-             [
-
-              div ~a:[a_id "email_contact"]
-              [Raw.a ~a:[a_href (Raw.uri_of_string "mailto:john@uscharterbrokers.com")]
-               [pcdata "Email: john@uscharterbrokers.com"]
-              ];
-
-              div ~a:[a_id "phone_contact"]
-              [Raw.a ~a:[a_href (Raw.uri_of_string "tel:18322805387")]
-               [pcdata "Phone: (832) 280-JETS (5387)"]
-              ];
-
-              div ~a:[a_id "faq_link_div"]
-              [a ~a:[a_class ["faq_link"]] ~service:faq_service
-               [pcdata "FAQ"]
-               ()
-              ];
-
-             ];
-
+           Html5.F.(body (
+            main_header @
+            [
              div ~a:[a_id "main_pg_outer_div"]
              [
               div ~a:[a_id "info_div"]
@@ -671,7 +638,7 @@ let () =
             ]
            ]
 
-           )))
+           ))))
 
 let () =
   CharterBroker_app.register
