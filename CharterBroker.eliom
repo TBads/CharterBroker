@@ -646,7 +646,7 @@ let () =
            ))))
 
 let () =
-  CharterBroker_app.register
+  Eliom_registration.Html5.register
     ~service:available_leg_service
     (fun () () ->
       Lwt.return
