@@ -12,7 +12,7 @@ module CharterBroker_app =
     end)
 
 let main_service =
-  Eliom_service.App.service ~path:[] ~get_params:Eliom_parameter.unit ()
+  Eliom_service.Http.service ~path:[] ~get_params:Eliom_parameter.unit ()
 
 let available_leg_service =
   Eliom_service.Http.service ~path:["available_leg"] ~get_params:Eliom_parameter.unit ()
@@ -383,14 +383,13 @@ let main_header = [
   ]
 
 let () =
-  CharterBroker_app.register
+  Eliom_registration.Html5.register
     ~service:main_service
     (fun () () ->
       lwt avail_legs_tbl = available_legs_table () in
       Lwt.return
         (Eliom_tools.F.html
            ~title:"Private Air Charters"
-           ~css:[]
            ~other_head:other_head
            Html5.F.(body (
 
