@@ -81,6 +81,17 @@ let secure_js_link =
   let uri = Xml.uri_of_string js_addr in
   js_script ~uri:uri ()
 
+let google_analytics_js =
+  let js_link ="https://www.googletagmanager.com/gtag/js?id=UA-145510785-1" in
+  let uri = Xml.uri_of_string js_link in
+  js_script ~uri:uri ()
+
+
+let google_analytics_js_script =
+  let js_addr = "https://uscharterbrokers.com/google_analytics.js" in
+  let uri = Xml.uri_of_string js_addr in
+  js_script ~uri:uri ()
+
 let other_head =
   let open Config in
   match env with
@@ -94,6 +105,8 @@ let other_head =
   | Prod -> [
     bootstrap_cdn_link;
     font_awesome_cdn_link;
+    google_analytics_js;
+    google_analytics_js_script;
     avinode_js;
     secure_js_link;
     secure_css_header;
