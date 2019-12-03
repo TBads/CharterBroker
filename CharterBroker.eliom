@@ -411,8 +411,8 @@ let () =
              div ~a:[a_id "main_pg_outer_div"]
              [
               div ~a:[a_id "avinodeApp"] [];
-              avinode_js;
-              (*div ~a:[a_id "form_div"] [request_for_quote_form ()];*)
+              (*avinode_js;*)
+              div ~a:[a_id "form_div"] [request_for_quote_form ()];
               div ~a:[a_id "info_div"]
               [
                 div ~a:[a_id "main_pg_bullets"]
@@ -728,7 +728,7 @@ let () =
       in
       lwt () =
         try
-          let s = "python send_mail.py 'johnmbrittain@gmail.com' " ^ subject ^ msg in
+          let s = "python send_mail.py 'john@uscharterbrokers.com' " ^ subject ^ msg in
           Lwt_io.print s >>
           lwt mail_process_status = Lwt_process.exec (Lwt_process.shell s) in
           Lwt_io.print "Mail should have worked!"
