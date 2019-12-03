@@ -187,7 +187,7 @@ a.home_link {
 }
 
 #form_div {
-    width: 44%;
+    width: 50%;
     float: left;
 }
 
@@ -202,19 +202,19 @@ a.home_link {
 
 #info_div {
     margin-top: 40px;
-    width: 80%;
+    width: 50%;
     float: left;
 }
 
 #info_div h3 {
-    font-size: 20px;
+    font-size: 25px;
     color: whitesmoke;
     text-shadow: 2px 2px 4px #333;
 }
 
 #main_pg_bullets {
   /*border: 2px solid red;*/
-  height: 60px;
+  height: 120px;
   width: 100%;
   vertical-align: middle;
 }
@@ -226,6 +226,7 @@ a.home_link {
   height: 100%;
   width: 50px;
   padding: 12px;
+  font-weight: bold;
 }
 
 #bullet_text {
