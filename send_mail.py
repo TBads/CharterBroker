@@ -1,5 +1,5 @@
 import sys, smtplib
-from secure_info import gmail_user, gmail_pwd
+from secure_info import gmail_user, gmail_app_pwd
 
 def send_email(recipient, subject, body):
 
@@ -15,7 +15,7 @@ def send_email(recipient, subject, body):
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.ehlo()
         server.starttls()
-        server.login(gmail_user, gmail_pwd)
+        server.login(gmail_user, gmail_app_pwd)
         server.sendmail(FROM, TO, message)
         server.close()
         print 'successfully sent the mail'
